@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import programmerzamannow.springdata.jpa.entity.Category;
 import programmerzamannow.springdata.jpa.entity.Product;
+import programmerzamannow.springdata.jpa.model.ProductPrice;
+import programmerzamannow.springdata.jpa.model.SimpleProduct;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,8 @@ import java.util.stream.Stream;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+
+    <T> List<T> findAllByNameLike(String name, Class<T> tClass);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Product> findFirstByIdEquals(Long id);
