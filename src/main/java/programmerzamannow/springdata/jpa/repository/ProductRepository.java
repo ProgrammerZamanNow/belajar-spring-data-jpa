@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    int deleteByName(String name);
+
     boolean existsByName(String name);
 
     Long countByCategory_Name(String name);

@@ -23,3 +23,5 @@ CREATE TABLE products
 ) ENGINE InnoDB;
 
 SELECT * FROM products;
+
+DELETE FROM products WHERE name = 'Samsung Galaxy S9';
