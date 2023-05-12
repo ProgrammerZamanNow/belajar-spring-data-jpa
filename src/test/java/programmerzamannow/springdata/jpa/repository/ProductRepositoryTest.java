@@ -109,8 +109,8 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void delete() {
-        transactionOperations.executeWithoutResult(transactionStatus -> {
+    void deleteOld() {
+        transactionOperations.executeWithoutResult(transactionStatus -> { // trasaksi 1
             Category category = categoryRepository.findById(1L).orElse(null);
             assertNotNull(category);
 
@@ -118,13 +118,31 @@ class ProductRepositoryTest {
             product.setName("Samsung Galaxy S9");
             product.setPrice(10_000_000L);
             product.setCategory(category);
-            productRepository.save(product);
+            productRepository.save(product); // trasaksi 1
 
-            int delete = productRepository.deleteByName("Samsung Galaxy S9");
+            int delete = productRepository.deleteByName("Samsung Galaxy S9"); // trasaksi 1
             assertEquals(1, delete);
 
-            delete = productRepository.deleteByName("Samsung Galaxy S9");
+            delete = productRepository.deleteByName("Samsung Galaxy S9"); // trasaksi 1
             assertEquals(0, delete);
         });
+    }
+
+    @Test
+    void deleteNew() {
+        Category category = categoryRepository.findById(1L).orElse(null);
+        assertNotNull(category);
+
+        Product product = new Product();
+        product.setName("Samsung Galaxy S9");
+        product.setPrice(10_000_000L);
+        product.setCategory(category);
+        productRepository.save(product); // trasaksi 1
+
+        int delete = productRepository.deleteByName("Samsung Galaxy S9"); // transaksi 2
+        assertEquals(1, delete);
+
+        delete = productRepository.deleteByName("Samsung Galaxy S9"); // transaksi 3
+        assertEquals(0, delete);
     }
 }
