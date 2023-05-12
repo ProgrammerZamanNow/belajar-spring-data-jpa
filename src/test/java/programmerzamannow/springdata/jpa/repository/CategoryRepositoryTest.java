@@ -3,6 +3,8 @@ package programmerzamannow.springdata.jpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import programmerzamannow.springdata.jpa.entity.Category;
 
 import java.util.List;
@@ -60,5 +62,42 @@ class CategoryRepositoryTest {
         assertNotNull(category.getId());
         assertNotNull(category.getCreatedDate());
         assertNotNull(category.getLastModifiedDate());
+    }
+
+    @Test
+    void example1() {
+        Category category = new Category();
+        category.setName("GADGET MURAH");
+
+        Example<Category> example = Example.of(category);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
+    }
+
+    @Test
+    void example2() {
+        Category category = new Category();
+        category.setName("GADGET MURAH");
+        category.setId(1L);
+
+        Example<Category> example = Example.of(category);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
+    }
+
+    @Test
+    void exampleMatcher() {
+        Category category = new Category();
+        category.setName("gadget MURAH");
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues()
+                .withIgnoreCase();
+
+        Example<Category> example = Example.of(category, matcher);
+
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(1, categories.size());
     }
 }
