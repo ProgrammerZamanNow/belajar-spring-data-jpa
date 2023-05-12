@@ -153,4 +153,22 @@ class ProductRepositoryTest {
         assertEquals(1, products.size());
         assertEquals("Apple iPhone 14 Pro Max", products.get(0).getName());
     }
+
+    @Test
+    void searchProducts() {
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Order.desc("id")));
+        Page<Product> products = productRepository.searchProduct("%iPhone%", pageable);
+        assertEquals(1, products.getContent().size());
+
+        assertEquals(0, products.getNumber());
+        assertEquals(2, products.getTotalPages());
+        assertEquals(2, products.getTotalElements());
+
+        products = productRepository.searchProduct("%GADGET%", pageable);
+        assertEquals(1, products.getContent().size());
+
+        assertEquals(0, products.getNumber());
+        assertEquals(2, products.getTotalPages());
+        assertEquals(2, products.getTotalElements());
+    }
 }
