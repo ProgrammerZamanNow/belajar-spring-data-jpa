@@ -1,10 +1,12 @@
 package programmerzamannow.springdata.jpa.repository;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,10 +16,14 @@ import programmerzamannow.springdata.jpa.entity.Category;
 import programmerzamannow.springdata.jpa.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Product> findFirstByIdEquals(Long id);
 
     Slice<Product> findAllByCategory(Category category, Pageable pageable);
 
