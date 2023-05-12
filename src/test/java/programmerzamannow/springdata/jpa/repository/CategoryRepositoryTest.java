@@ -50,4 +50,15 @@ class CategoryRepositoryTest {
         assertEquals(1, categories.size());
         assertEquals("GADGET MURAH", categories.get(0).getName());
     }
+
+    @Test
+    void audit() {
+        Category category = new Category();
+        category.setName("Sample Audit");
+        categoryRepository.save(category);
+
+        assertNotNull(category.getId());
+        assertNotNull(category.getCreatedDate());
+        assertNotNull(category.getLastModifiedDate());
+    }
 }
